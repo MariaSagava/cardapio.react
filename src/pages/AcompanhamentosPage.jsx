@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import './acomp.css';
 import PageBanner from '../components/PageBanner';
 import ProductGrid from '../components/ProductGrid';
 import batataFritaImage from '../assets/bf.jpg';
 import onionRingsImage from '../assets/onionring.jpeg';
 import nuggetsImage from '../assets/nuggets.jpeg';
+import bannerImage from '../assets/banner-acomp.jpeg'
 
 function AcompanhamentosPage({ addToCart }) {
   const categories = [
@@ -56,12 +58,14 @@ function AcompanhamentosPage({ addToCart }) {
       <PageBanner 
         title="Acompanhamentos" 
         description="O complemento perfeito para o seu lanche" 
+        backgroundImage={bannerImage}
       />
       
       <ProductGrid 
         products={products}
         categories={categories}
         addToCart={addToCart}
+        
       />
     </>
   );

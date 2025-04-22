@@ -1,4 +1,5 @@
 import PageBanner from '../components/PageBanner';
+import './SobremesasPage.css';
 import ProductGrid from '../components/ProductGrid';
 import bkMixImage from '../assets/site_BK_Mix_Pistache-1.png';
 import bannerImage from '../assets/banner-sobrem.jpg';

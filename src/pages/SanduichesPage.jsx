@@ -1,4 +1,5 @@
 import PageBanner from '../components/PageBanner';
+import './SanduichesPage.css';
 import ProductGrid from '../components/ProductGrid';
 import bkTasteImage from '../assets/BK_Taste_1.0.png';
 import bannerImage from '../assets/banner-sand.jpg';

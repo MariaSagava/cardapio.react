@@ -1,0 +1,86 @@
+/* Botões de classificação */
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.category-button {
+  background: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease-in-out;
+}
+
+.category-button:hover,
+.category-button.active {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.category-button:focus {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+/* Estética aprimorada para o banner */
+.page-banner {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+  color: var(--text-dark);
+  padding: 3rem 1rem;
+  text-align: center;
+  border-bottom: 2px solid var(--primary-dark);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.page-banner::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 60px;
+  height: 4px;
+  background: var(--primary-dark);
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/* Botão de adicionar com ícone suave */
+.add-to-cart-button {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.add-to-cart-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.add-to-cart-button::before {
+  content: "🛒";
+  font-size: 1.2em;
+}

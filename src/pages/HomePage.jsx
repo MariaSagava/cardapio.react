@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import './HomePage.css';
 import ProductCard from '../components/ProductCard';
 import batataFritaImage from '../assets/bf.jpg';
 import bkTasteImage from '../assets/BK_Taste_1.0.png';
