@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
+
 import CategoryFilter from './CategoryFilter';
 
 function ProductGrid({ products, categories, addToCart }) {
