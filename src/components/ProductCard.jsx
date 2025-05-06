@@ -20,7 +20,7 @@ function ProductCard({ product, addToCart }) {
       className="product-card"
     >
       <div className="product-image">
-        <img src={product.image} alt={product.imageAlt} />
+        <img src={product.image} alt={product.imageAlt} loading='lazy' />
         {product.isPromo && <span className="promo-tag">Promoção</span>}
       </div>
       
