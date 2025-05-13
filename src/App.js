@@ -1,13 +1,14 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import AcompanhamentosPage from './pages/AcompanhamentosPage';
 import SanduichesPage from './pages/SanduichesPage';
 import SobremesasPage from './pages/SobremesasPage';
 import './App.css';
+
+// Usando lazy loading para o Footer
+const Footer = lazy(() => import('./components/Footer'));
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -64,7 +65,9 @@ function App() {
           <Route path="/sobrem" element={<SobremesasPage addToCart={addToCart} />} />
         </Routes>
         
-        <Footer />
+        <Suspense fallback={<div>Carregando rodapé...</div>}>
+          <Footer />
+        </Suspense>
       </div>  
     </Router>
   );
