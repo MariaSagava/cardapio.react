@@ -21,9 +21,13 @@ function Header({ cartItems, isCartOpen, setIsCartOpen, removeFromCart, checkout
   };
 
   return (
-    <header role="banner">
-      <h1>Burguer King</h1>
-      <img src={logo} alt="Logo do Burguer King" loading='lazy' />
+    <header role="banner"> 
+      <h1 >Burguer King</h1>
+     <img src={logo} 
+     alt={"Logotipo do Burger King, com texto estilizado e cores características da marca"}
+     className="menu-item-imagem"
+     loading="lazy"
+    />
       <div className="cart-container" ref={cartRef}>
         <button 
           className="cart-button" 

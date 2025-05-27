@@ -51,6 +51,7 @@ function HomePage({ addToCart }) {
   return (
     <>
       <div className="hero-section">
+        <link rel="preload" as="style" href="/styles/hero.css" />
         <h2>Bem-vindo ao Burger King</h2>
         <p>Descubra o sabor inigualável do hambúrguer grelhado no fogo</p>
       </div>

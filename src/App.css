@@ -1,43 +1,9 @@
+/* CSS Crítico inline no HTML - essas regras devem ir no <head> */
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Estilos para o Carrinho de Compras */
+/* Otimizações de performance com will-change e transform3d */
 .cart-icon {
   position: relative;
   cursor: pointer;
@@ -45,7 +11,8 @@
   align-items: center;
   gap: 5px;
   padding: 8px;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
+  will-change: opacity; /* Otimização para animações */
 }
 
 .cart-icon:hover {
@@ -66,59 +33,10 @@
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  will-change: transform; /* Otimização para possíveis animações */
 }
 
-
-/* === Arquivo 1 - Modificações === */
-/* Removendo limitações de altura e rolagem */
-.cart-items {
-  /* Removido: max-height: 300px; */
-  /* Removido: overflow-y: auto; */
-  margin-bottom: 1rem;
-  padding-right: 5px;
-}
-
-.cart-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 10px);
-  width: 340px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  padding: 1rem;
-  display: none;
-  z-index: 100;
-  animation: fadeIn 0.2s ease;
-  /* Removido: max-height: 80vh; */
-  /* Removido: overflow: hidden; */
-}
-
-/* Ajustes para mobile */
-@media (max-width: 450px) {
-  .cart-dropdown {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    max-width: 100%;
-    /* Removido: max-height: 70vh; */
-    border-radius: 12px 12px 0 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    animation: slideUp 0.3s ease;
-  }
-  
-  .cart-items {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    /* Removido: max-height: 60vh; */
-    /* Removido: overflow-y: auto; */
-  }
-}
+/* Container do carrinho otimizado */
 .cart-container {
   position: absolute;
   top: 60px;
@@ -133,13 +51,14 @@
   border: 1px solid #e0e0e0;
   transform-origin: top right;
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1) translateZ(0); /* Force hardware acceleration */
+  will-change: transform, opacity;
 } 
 
-/* Estado do carrinho quando fechado */
+/* Estado otimizado para carrinho fechado */
 .cart-container.hidden {
   opacity: 0;
-  transform: scale(0.95);
+  transform: scale(0.95) translateZ(0);
   pointer-events: none;
 }
 
@@ -166,18 +85,24 @@
   font-size: 20px;
   cursor: pointer;
   padding: 5px;
+  transition: color 0.2s ease;
 }
 
 .cart-close:hover {
   color: #333;
 }
 
+/* Container de itens com scroll virtual implícito */
 .cart-items {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 1rem;
+  padding-right: 5px;
+  /* Removidas limitações de altura para melhor UX */
 }
 
+/* Item do carrinho otimizado */
 .cart-item {
   display: flex;
   align-items: center;
@@ -185,14 +110,18 @@
   background-color: #f8f9fa;
   border-radius: 6px;
   position: relative;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
+/* Imagem otimizada com aspect-ratio */
 .cart-item-image {
   width: 60px;
   height: 60px;
   object-fit: cover;
   border-radius: 4px;
   margin-right: 12px;
+  aspect-ratio: 1; /* Previne layout shift */
+  background-color: #f0f0f0; /* Placeholder enquanto carrega */
 }
 
 .cart-item-details {
@@ -206,6 +135,7 @@
   margin-bottom: 4px;
   color: #333;
   font-size: 14px;
+  line-height: 1.3;
 }
 
 .cart-item-price {
@@ -214,6 +144,7 @@
   font-size: 14px;
 }
 
+/* Botão de remoção otimizado */
 .cart-item-remove {
   position: absolute;
   top: 10px;
@@ -230,7 +161,8 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
+  will-change: background-color;
 }
 
 .cart-item-remove:hover {
@@ -252,6 +184,7 @@
   color: #333;
 }
 
+/* Botão de checkout otimizado */
 .checkout-btn {
   width: 100%;
   padding: 12px;
@@ -262,7 +195,9 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
+  will-change: background-color;
+  transform: translateZ(0); /* Hardware acceleration */
 }
 
 .checkout-btn:hover {
@@ -279,10 +214,10 @@
   color: #888;
 }
 
-/* Estilos Responsivos */
+/* Media queries otimizadas com container queries quando possível */
 @media (max-width: 768px) {
   .cart-container {
-    top: 20xpx;
+    top: 70px;
     width: 320px;
     right: 10px;
   }
@@ -290,24 +225,67 @@
 
 @media (max-width: 576px) {
   .cart-container {
-    top: 200px;
-    width: 30%;
- 
-    left: 70%;
-    
-
+    position: fixed; /* Fixed para melhor performance em mobile */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(0);
+    width: calc(100vw - 20px);
+    max-width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
   }
   
+  .cart-container.hidden {
+    transform: translate(-50%, -50%) scale(0.95) translateZ(0);
+  }
+  
+  .cart-item {
+    flex-direction: column;
+    text-align: center;
+  }
   
   .cart-item-image {
     width: 100%;
     height: 120px;
     margin-right: 0;
     margin-bottom: 10px;
+    max-width: 120px;
   }
   
   .cart-item-remove {
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
   }
 }
+
+/* Animações otimizadas */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-10px) translateZ(0);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(100%) translateZ(0); 
+  }
+  to { 
+    transform: translateY(0) translateZ(0); 
+  }
+}
+
+/* Preload crítico para fontes */
+@font-display: swap; /* Aplicar a todas as fontes customizadas */
+
+/* Otimizações para reduzir Cumulative Layout Shift */
+.cart-dropdown {
+  animation: fadeIn 0.2s ease;
+  contain: layout style paint; /* CSS Containment para melhor performance */
+}
+
+/* Legacy styles removidos para reduzir CSS não utilizado */

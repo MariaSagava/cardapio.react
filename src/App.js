@@ -1,47 +1,73 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense, lazy, useMemo, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import HomePage from './pages/HomePage';
-import AcompanhamentosPage from './pages/AcompanhamentosPage';
-import SanduichesPage from './pages/SanduichesPage';
-import SobremesasPage from './pages/SobremesasPage';
 import './App.css';
 
-// Usando lazy loading para o Footer
+// Lazy loading para todas as páginas para reduzir bundle inicial
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AcompanhamentosPage = lazy(() => import('./pages/AcompanhamentosPage'));
+const SanduichesPage = lazy(() => import('./pages/SanduichesPage'));
+const SobremesasPage = lazy(() => import('./pages/SobremesasPage'));
 const Footer = lazy(() => import('./components/Footer'));
+
+// Componente de loading otimizado
+const LoadingFallback = ({ text = "Carregando..." }) => (
+  <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '200px',
+    fontSize: '16px',
+    color: '#666'
+  }}>
+    {text}
+  </div>
+);
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const addToCart = (product) => {
-    setCartItems([...cartItems, product]);
+  // Memoização do cálculo do total para evitar recálculos desnecessários
+  const cartTotal = useMemo(() => {
+    return cartItems.reduce((sum, item) => sum + item.price, 0);
+  }, [cartItems]);
+
+  // useCallback para funções que são passadas como props
+  const addToCart = useCallback((product) => {
+    setCartItems(prevItems => [...prevItems, product]);
     setIsCartOpen(true);
-  };
+  }, []);
 
-  const removeFromCart = (index) => {
-    const newCartItems = [...cartItems];
-    newCartItems.splice(index, 1);
-    setCartItems(newCartItems);
-  };
+  const removeFromCart = useCallback((index) => {
+    setCartItems(prevItems => {
+      const newCartItems = [...prevItems];
+      newCartItems.splice(index, 1);
+      return newCartItems;
+    });
+  }, []);
 
-  const checkout = () => {
+  const checkout = useCallback(() => {
     if (cartItems.length > 0) {
-      const total = cartItems.reduce((sum, item) => sum + item.price, 0);
-      alert(`Pedido finalizado! Total: R$ ${total.toFixed(2)}`);
+      alert(`Pedido finalizado! Total: R$ ${cartTotal.toFixed(2)}`);
       setCartItems([]);
       setIsCartOpen(false);
     }
-  };
+  }, [cartItems.length, cartTotal]);
 
-  const closeCartOnOutsideClick = (e) => {
-    if (!e.target.closest('.cart-container') && isCartOpen) {
-      setIsCartOpen(false);
-    }
-  };
-
+  // Otimização do event listener - só adiciona quando necessário
   useEffect(() => {
-    document.addEventListener('click', closeCartOnOutsideClick);
+    if (!isCartOpen) return;
+
+    const closeCartOnOutsideClick = (e) => {
+      if (!e.target.closest('.cart-container')) {
+        setIsCartOpen(false);
+      }
+    };
+
+    // Usar passive listener para melhor performance
+    document.addEventListener('click', closeCartOnOutsideClick, { passive: true });
+    
     return () => {
       document.removeEventListener('click', closeCartOnOutsideClick);
     };
@@ -56,16 +82,19 @@ function App() {
           setIsCartOpen={setIsCartOpen}
           removeFromCart={removeFromCart}
           checkout={checkout}
+          cartTotal={cartTotal}
         />
         
-        <Routes>
-          <Route path="/" element={<HomePage addToCart={addToCart} />} />
-          <Route path="/acomp" element={<AcompanhamentosPage addToCart={addToCart} />} />
-          <Route path="/sand" element={<SanduichesPage addToCart={addToCart} />} />
-          <Route path="/sobrem" element={<SobremesasPage addToCart={addToCart} />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback text="Carregando página..." />}>
+          <Routes>
+            <Route path="/" element={<HomePage addToCart={addToCart} />} />
+            <Route path="/acomp" element={<AcompanhamentosPage addToCart={addToCart} />} />
+            <Route path="/sand" element={<SanduichesPage addToCart={addToCart} />} />
+            <Route path="/sobrem" element={<SobremesasPage addToCart={addToCart} />} />
+          </Routes>
+        </Suspense>
         
-        <Suspense fallback={<div>Carregando rodapé...</div>}>
+        <Suspense fallback={<LoadingFallback text="Carregando rodapé..." />}>
           <Footer />
         </Suspense>
       </div>  
